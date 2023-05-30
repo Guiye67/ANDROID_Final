@@ -2,7 +2,10 @@ package baeza.guillermo.gymandyang.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+val MainPruple = Color(0xff7951a8)
+val DarkPruple = Color(0xff69369e)
+val BackgroundGray = Color(0xffd3d3d3)
+
+// main-purple rgb(121, 81, 168)
+// main-purple-dark rgb(105, 54, 158)
+// background-gray rgb(211, 211, 211)
