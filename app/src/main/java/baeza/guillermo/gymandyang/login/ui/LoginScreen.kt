@@ -1,21 +1,261 @@
 package baeza.guillermo.gymandyang.login.ui
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import baeza.guillermo.gymandyang.ui.model.Routes
+import baeza.guillermo.gymandyang.R.drawable.*
+import baeza.guillermo.gymandyang.ui.theme.BackgroundGray
+import baeza.guillermo.gymandyang.ui.theme.DarkPruple
+import baeza.guillermo.gymandyang.ui.theme.MainPruple
 
 @Composable
 fun LoginScreen(navCon: NavHostController, scaffoldState: ScaffoldState, loginViewModel: LoginViewModel) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        Text(text = "LOGIN")
-        Button(onClick = { navCon.navigate(Routes.HomeScreen.route) }) {
-            Text(text = "Go to Home")
+    val email:String by loginViewModel.email.observeAsState(initial = "")
+    val password:String by loginViewModel.password.observeAsState(initial = "")
+    val validEmail:Boolean by loginViewModel.validEmail.observeAsState(initial = false)
+    val incorrectData:Boolean by loginViewModel.incorrectData.observeAsState(initial = false)
+    val view:Int by loginViewModel.view.observeAsState(initial = 1)
+    val scope = rememberCoroutineScope()
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MainPruple),
+        contentAlignment = Alignment.Center
+    ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .fillMaxHeight(0.65f),
+            shape = RoundedCornerShape(20.dp),
+            elevation = 30.dp
+        ) {
+            Column(
+                modifier = Modifier
+                    .background(Color.White),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                if (view == 1) {
+                    LogoImage()
+
+                    CustomSpacer(10)
+
+                    LoginTitle()
+
+                    CustomSpacer(30)
+
+                    EmailField(value = email) { loginViewModel.onFieldChange(it, password) }
+
+                    CustomSpacer(20)
+
+                    PasswordField(password = password) { loginViewModel.onFieldChange(email, it) }
+
+                    CustomSpacer(20)
+
+                    LoginButton(navCon) { loginViewModel.onLogin(navCon) }
+                } else {
+                    CircularProgressIndicator(strokeWidth = 3.dp)
+                }
+            }
         }
     }
+}
+
+@Composable
+fun LoginButton(navCon: NavHostController, onLogin: (NavHostController) -> Unit) {
+    Button(
+        onClick = { onLogin(navCon) },
+        modifier = Modifier
+            .fillMaxWidth(0.6f)
+            .height(45.dp),
+        shape = RoundedCornerShape(20.dp)
+    ) {
+        Text(text = "Login")
+    }
+}
+
+@Composable
+fun EmailField(value: String, onValueChanged: (String) -> Unit) {
+    TextField(
+        value = value,
+        onValueChange = { onValueChanged(it) },
+        label = { Text("Email") },
+        singleLine = true,
+        leadingIcon = {
+            Icon(
+                painter = painterResource(id = email_icon),
+                contentDescription = "Email",
+                tint = MainPruple
+            )
+        },
+        modifier = Modifier
+            .fillMaxWidth(0.9f)
+            .border(
+                5.dp,
+                DarkPruple,
+                RoundedCornerShape(35.dp)
+            ),
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        )
+    )
+}
+
+@Composable
+fun PasswordField(password: String, onValueChanged: (String) -> Unit) {
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
+    TextField(
+        value = password,
+        onValueChange = { onValueChanged(it) },
+        label = { Text("Password") },
+        singleLine = true,
+        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        trailingIcon = {
+            IconButton(
+                onClick = {passwordVisible = !passwordVisible}){
+                if (passwordVisible) {
+                    Icon(
+                        painter = painterResource(id = eye_crossed),
+                        contentDescription = "Crossed Eye",
+                        tint = MainPruple
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(id = eye),
+                        contentDescription = "Eye",
+                        tint = MainPruple
+                    )
+                }
+            }
+        },
+        leadingIcon = {
+            Icon(painter = painterResource(id = lock), contentDescription = "Password", tint = MainPruple)
+        },
+        modifier = Modifier
+            .fillMaxWidth(0.9f)
+            .border(
+                5.dp,
+                DarkPruple,
+                RoundedCornerShape(35.dp)
+            ),
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        )
+    )
+}
+
+@Composable
+fun LoginTitle() {
+
+    Box(contentAlignment = Alignment.Center) {
+        Text(
+            text = "GYM&YANG",
+            fontSize = 32.sp,
+            fontWeight = FontWeight.SemiBold,
+            style = TextStyle(shadow = Shadow(DarkPruple, Offset(0F, 0F), 80F))
+        )
+        Canvas(Modifier.fillMaxWidth(0.65f).height(60.dp)) {
+            val canvasWidth = size.width
+            val canvasHeight = size.height
+            drawLine( //top left line
+                start = Offset(x = 0f, y = 0f),
+                end = Offset(x = 50f, y = 0f),
+                strokeWidth = 5f,
+                color = DarkPruple
+            )
+            drawLine( //top right line
+                start = Offset(x = canvasWidth-50f, y = 0f),
+                end = Offset(x = canvasWidth, y = 0f),
+                strokeWidth = 5f,
+                color = DarkPruple
+            )
+            drawLine( //bottom left line
+                start = Offset(x = 0f, y = canvasHeight),
+                end = Offset(x = 50f, y = canvasHeight),
+                strokeWidth = 5f,
+                color = DarkPruple
+            )
+            drawLine( //bottom right line
+                start = Offset(x = canvasWidth-50f, y = canvasHeight),
+                end = Offset(x = canvasWidth, y = canvasHeight),
+                strokeWidth = 5f,
+                color = DarkPruple
+            )
+            drawLine( //left top line
+                start = Offset(x = 0f, y = 0f),
+                end = Offset(x = 0f, y = 50f),
+                strokeWidth = 5f,
+                color = DarkPruple
+            )
+            drawLine( //left bottom line
+                start = Offset(x = 0f, y = canvasHeight-50f),
+                end = Offset(x = 0f, y = canvasHeight),
+                strokeWidth = 5f,
+                color = DarkPruple
+            )
+            drawLine( //right top line
+                start = Offset(x = canvasWidth, y = 0f),
+                end = Offset(x = canvasWidth, y = 50f),
+                strokeWidth = 5f,
+                color = DarkPruple
+            )
+            drawLine( //right bottom line
+                start = Offset(x = canvasWidth, y = canvasHeight-50f),
+                end = Offset(x = canvasWidth, y = canvasHeight),
+                strokeWidth = 5f,
+                color = DarkPruple
+            )
+        }
+    }
+
+}
+
+@Composable
+fun CustomSpacer(num: Int) {
+    Spacer(modifier = Modifier.height(num.dp))
+}
+
+@Composable
+fun LogoImage() {
+    Image(
+        painter = painterResource(id = gymyang_logo),
+        contentDescription = "Gym&Yang Logo",
+        modifier = Modifier.border(5.dp, MainPruple, CircleShape)
+    )
 }
