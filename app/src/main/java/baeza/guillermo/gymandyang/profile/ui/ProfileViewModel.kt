@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import baeza.guillermo.gymandyang.datastore.UserPreferenceService
+import baeza.guillermo.gymandyang.profile.data.dto.ProfileDTO
+import baeza.guillermo.gymandyang.profile.domain.ProfileUseCase
 import baeza.guillermo.gymandyang.register.data.dto.RegisterDTO
 import baeza.guillermo.gymandyang.ui.models.Routes
 import baeza.guillermo.gymandyang.ui.models.User
@@ -21,10 +23,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    //private val registerUseCase: RegisterUseCase
+    private val profileUseCase: ProfileUseCase,
     private val userPreference: UserPreferenceService
 ) : ViewModel() {
-    private val _id = MutableLiveData<String>()
+    private var _id = ""
+    private var _token = ""
 
     private val _email = MutableLiveData<String>()
     val email: LiveData<String> = _email
@@ -47,8 +50,6 @@ class ProfileViewModel @Inject constructor(
     private val _classes = MutableLiveData<List<String>>()
     val classes: LiveData<List<String>> = _classes
 
-    private val _token = MutableLiveData<String>()
-
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
 
@@ -67,6 +68,13 @@ class ProfileViewModel @Inject constructor(
 
     private val _passwordsMatch = MutableLiveData<Boolean>()
 
+    init {
+        _changePassword.value = false
+        _validEmail.value = false
+        _validPassword.value = false
+        _passwordsMatch.value = false
+    }
+
     fun initUser() {
         var user: User? = User("","","","","", listOf(), "")
         _loading.value = true
@@ -74,13 +82,13 @@ class ProfileViewModel @Inject constructor(
             user = userPreference.getUser("user")
             _loading.value = false
         }
-        _id.value = user!!._id
+        _id = user!!._id
         _email.value = user!!.email
         _name.value = user!!.name
         _surname.value = user!!.surname
         _payment.value = user!!.payment
         _classes.value = user!!.classes
-        _token.value = user!!.token
+        _token = user!!.token
     }
 
     fun setUpdating(value: Boolean) { _updating.value = value }
@@ -89,17 +97,15 @@ class ProfileViewModel @Inject constructor(
 
     fun setChangePassword(value: Boolean) { _changePassword.value = value }
 
-    fun addMonths(num: Long) {
+    fun addMonths(num: Long, scope: CoroutineScope, scaffoldState: ScaffoldState) {
         var userPayment: LocalDate = LocalDate.now()
         if (_payment.value != "0") userPayment = LocalDate.parse(_payment.value)
 
-        Log.i("GYM", "months: $userPayment")
-
         userPayment = userPayment.plusMonths(num)
 
-        Log.i("GYM", "months: $userPayment")
+        _payment.value = userPayment.toString()
 
-
+        doUpdate(scope, scaffoldState)
     }
 
     fun onFieldChange(name: String, surname: String, email: String, newPassword: String, newPasswordRepeat: String) {
@@ -118,48 +124,60 @@ class ProfileViewModel @Inject constructor(
         setUpdating(false)
     }
 
-    fun onBtnClick(navCon: NavHostController, scope: CoroutineScope, scaffoldState: ScaffoldState) {
+    fun onBtnClick(scope: CoroutineScope, scaffoldState: ScaffoldState) {
         if (!_validEmail.value!!) {
             launchSnackbar(scope, scaffoldState, "Invalid Email")
         }
-        else if (_changePassword.value!! && (_validPassword.value == null || !_validPassword.value!!)) {
+        else if (_changePassword.value!! &&  !_validPassword.value!!) {
             launchSnackbar(scope, scaffoldState, "Invalid Password (min length: 8)")
         }
-        else if (_changePassword.value!! && (_passwordsMatch.value == null || !_passwordsMatch.value!!)) {
+        else if (_changePassword.value!! && !_passwordsMatch.value!!) {
             launchSnackbar(scope, scaffoldState, "Passwords don't match")
         }
         else {
-            doUpdate(navCon, scope, scaffoldState)
+            doUpdate(scope, scaffoldState)
         }
     }
 
-    fun doUpdate(navCon: NavHostController, scope: CoroutineScope, scaffoldState: ScaffoldState) {
+    private fun doUpdate(scope: CoroutineScope, scaffoldState: ScaffoldState) {
         _loading.value = true
         viewModelScope.launch {
-//            val result = registerUseCase(
-//                RegisterDTO(
-//                    email = _email.value!!,
-//                    name = _name.value!!,
-//                    surname = _surname.value!!,
-//                    password = _password.value!!
-//                )
-//            )
-//            if (result._id != "-1") {
-//                Log.i("Gym", "Register completed")
-//
-////                navCon.popBackStack()
-////                navCon.navigate(Routes.HomeScreen.route)
-//                navCon.navigate(Routes.HomeScreen.route) {popUpTo(navCon.graph.id) {inclusive = true} }
-//                onFieldChange("", "", "", "", "")
-//            } else {
-//                Log.i("Gym", "Error: ${result.email}")
-//                scope.launch {
-//                    scaffoldState.snackbarHostState.showSnackbar(
-//                        message = "Error: ${result.email}",
-//                        duration = SnackbarDuration.Short
-//                    )
-//                }
-//            }
+            val result = profileUseCase(
+                ProfileDTO(
+                    email = _email.value!!,
+                    name = _name.value!!,
+                    surname = _surname.value!!,
+                    password = if (_changePassword.value!!) _newPassword.value!! else null,
+                    payment = _payment.value!!,
+                    classes = _classes.value!!
+                ),
+                _id,
+                _token
+            )
+            if (result._id != "-1") {
+                Log.i("Gym", "Update completed")
+
+                if (_changePassword.value!!) {
+                    scope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar(
+                            message = "Password updated successfuly",
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }
+
+                _changePassword.value = false
+                _updating.value = false
+                initUser()
+            } else {
+                Log.i("Gym", "Error: ${result.email}")
+                scope.launch {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = "Error: ${result.email}",
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
             _loading.value = false
         }
     }

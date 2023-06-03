@@ -23,10 +23,11 @@ import androidx.compose.ui.window.DialogProperties
 import baeza.guillermo.gymandyang.ui.theme.MainGreen
 import baeza.guillermo.gymandyang.ui.theme.MainPruple
 import baeza.guillermo.gymandyang.ui.theme.MainRed
+import kotlinx.coroutines.CoroutineScope
 import java.time.LocalDate
 
 @Composable
-fun ProfileContent(profileViewModel: ProfileViewModel) {
+fun ProfileContent(profileViewModel: ProfileViewModel, scope: CoroutineScope, scaffoldState: ScaffoldState) {
     val email:String by profileViewModel.email.observeAsState(initial = "")
     val name:String by profileViewModel.name.observeAsState(initial = "")
     val surname:String by profileViewModel.surname.observeAsState(initial = "")
@@ -47,7 +48,7 @@ fun ProfileContent(profileViewModel: ProfileViewModel) {
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (showPaymentDialog) PaymentDialog(profileViewModel)
+        if (showPaymentDialog) PaymentDialog(profileViewModel, scope, scaffoldState)
 
         CustomSpacer(10)
 
@@ -200,7 +201,7 @@ fun PaymentCard(profileViewModel: ProfileViewModel, dateExpired: Boolean, paymen
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PaymentDialog(profileViewModel: ProfileViewModel) {
+fun PaymentDialog(profileViewModel: ProfileViewModel, scope: CoroutineScope, scaffoldState: ScaffoldState) {
     var expanded by remember { mutableStateOf(false) }
     val options = listOf(1, 3, 6, 12)
     var selectedOption by remember { mutableStateOf(options[0]) }
@@ -267,7 +268,7 @@ fun PaymentDialog(profileViewModel: ProfileViewModel) {
                     Button(
                         onClick = {
                             profileViewModel.setShowPaymentDialog(false)
-                            profileViewModel.addMonths(selectedOption.toLong())
+                            profileViewModel.addMonths(selectedOption.toLong(), scope, scaffoldState)
                         },
                         colors = ButtonDefaults.buttonColors(backgroundColor = MainGreen),
                         shape = RoundedCornerShape(20.dp)

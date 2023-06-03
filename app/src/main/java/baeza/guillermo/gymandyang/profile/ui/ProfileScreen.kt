@@ -46,7 +46,7 @@ fun ProfileScreen(navCon: NavHostController, scaffoldState: ScaffoldState, profi
                     ProfileUpdater(profileViewModel, navCon, scope, scaffoldState)
                 }
                 else {
-                    ProfileContent(profileViewModel)
+                    ProfileContent(profileViewModel, scope, scaffoldState)
                 }
             }
         }

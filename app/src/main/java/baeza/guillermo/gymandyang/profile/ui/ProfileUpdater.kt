@@ -150,7 +150,7 @@ fun UpdaterButtons(profileViewModel: ProfileViewModel, navCon: NavHostController
         Box(modifier = Modifier
             .fillMaxWidth()
             .padding(start = 5.dp), contentAlignment = Alignment.CenterEnd) {
-            Button(onClick = { profileViewModel.onBtnClick(navCon, scope, scaffoldState) },
+            Button(onClick = { profileViewModel.onBtnClick(scope, scaffoldState) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(45.dp),
