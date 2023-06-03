@@ -1,9 +1,6 @@
 package baeza.guillermo.gymandyang.login.ui
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,10 +18,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import baeza.guillermo.gymandyang.R.drawable.*
+import baeza.guillermo.gymandyang.ui.models.Routes
 import baeza.guillermo.gymandyang.ui.theme.DarkPruple
 import baeza.guillermo.gymandyang.ui.theme.MainPruple
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +33,6 @@ import kotlinx.coroutines.launch
 fun LoginScreen(navCon: NavHostController, scaffoldState: ScaffoldState, loginViewModel: LoginViewModel) {
     val email:String by loginViewModel.email.observeAsState(initial = "")
     val password:String by loginViewModel.password.observeAsState(initial = "")
-    val validEmail:Boolean by loginViewModel.validEmail.observeAsState(initial = false)
     val loading:Boolean by loginViewModel.loading.observeAsState(false)
     val scope = rememberCoroutineScope()
 
@@ -52,7 +50,7 @@ fun LoginScreen(navCon: NavHostController, scaffoldState: ScaffoldState, loginVi
                         .fillMaxWidth(0.8f)
                         .fillMaxHeight(0.65f),
                     shape = RoundedCornerShape(20.dp),
-                    elevation = 30.dp
+                    elevation = 10.dp
                 ) {
                     Column(
                         modifier = Modifier
@@ -67,19 +65,21 @@ fun LoginScreen(navCon: NavHostController, scaffoldState: ScaffoldState, loginVi
 
                             LoginTitle()
 
-                            CustomSpacer(30)
+                            CustomSpacer(20)
 
                             EmailField(value = email) { loginViewModel.onFieldChange(it, password) }
 
-                            CustomSpacer(20)
+                            CustomSpacer(15)
 
                             PasswordField(password = password) { loginViewModel.onFieldChange(email, it) }
 
                             CustomSpacer(20)
 
-                            LoginButton(navCon, validEmail, scope, scaffoldState) {
-                                loginViewModel.onLogin(navCon, scope, scaffoldState)
-                            }
+                            LoginButton { loginViewModel.onBtnClick(navCon, scope, scaffoldState) }
+
+                            CustomSpacer(10)
+
+                            RegisterLink(navCon)
                         } else {
                             CircularProgressIndicator(strokeWidth = 3.dp)
                         }
@@ -91,25 +91,9 @@ fun LoginScreen(navCon: NavHostController, scaffoldState: ScaffoldState, loginVi
 }
 
 @Composable
-fun LoginButton(
-    navCon: NavHostController,
-    validEmail: Boolean,
-    scope: CoroutineScope,
-    scaffoldState: ScaffoldState,
-    onLogin: () -> Unit
-) {
+fun LoginButton(onBtnClick: () -> Unit) {
     Button(
-        onClick = {
-            if (validEmail) onLogin()
-            else {
-                scope.launch {
-                    scaffoldState.snackbarHostState.showSnackbar(
-                        message = "Invalid Email",
-                        duration = SnackbarDuration.Short
-                    )
-                }
-            }
-        },
+        onClick = { onBtnClick() },
         modifier = Modifier
             .fillMaxWidth(0.6f)
             .height(45.dp),
@@ -279,5 +263,17 @@ fun LogoImage() {
         painter = painterResource(id = gymyang_logo),
         contentDescription = "Gym&Yang Logo",
         modifier = Modifier.border(5.dp, MainPruple, CircleShape)
+    )
+}
+
+@Composable
+fun RegisterLink(navCon: NavHostController) {
+    Text(
+        text = "Create new account?",
+        modifier = Modifier
+            .clickable { navCon.navigate(Routes.RegisterScreen.route) },
+        fontSize = 14.sp,
+        textDecoration = TextDecoration.Underline,
+        color = MainPruple
     )
 }

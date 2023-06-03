@@ -1,22 +1,21 @@
-package baeza.guillermo.gymandyang.login.data.network
+package baeza.guillermo.gymandyang.register.data.network
 
 import android.util.Log
 import baeza.guillermo.gymandyang.datastore.UserPreferenceService
-import baeza.guillermo.gymandyang.login.data.dto.LoginDTO
+import baeza.guillermo.gymandyang.register.data.dto.RegisterDTO
 import baeza.guillermo.gymandyang.ui.models.User
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class LoginService @Inject constructor(
-    private val loginClient: LoginClient,
+class RegisterService @Inject constructor(
+    private val resgisterClient: RegisterClient,
     private val userPreference: UserPreferenceService
 ) {
-    suspend fun doLogin(email: String, password: String) : User {
+    suspend fun doRegister(data: RegisterDTO) : User {
         return withContext(Dispatchers.IO) {
-            val data = LoginDTO(email, password)
-            val response = loginClient.doLogin(data)
+            val response = resgisterClient.doRegister(data)
 
             Log.i("Gym", "data: ${response.body()}")
 
@@ -32,20 +31,20 @@ class LoginService @Inject constructor(
                 )
                 Gson().toJson(user).let { userPreference.addUser("user", it) }
                 user
-            } else if (response.code() == 401) {
+            } else if (response.code() == 400) {
                 User(
                     _id = "-1",
-                    email = "Invalid password",
+                    email = "Email not valid",
                     name = "",
                     surname = "",
                     payment = "",
                     classes = listOf(),
                     token = ""
                 )
-            } else if (response.code() == 404) {
+            } else if (response.code() == 409) {
                 User(
                     _id = "-1",
-                    email = "Cannot find client",
+                    email = "Email already in use",
                     name = "",
                     surname = "",
                     payment = "",

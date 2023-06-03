@@ -1,6 +1,7 @@
-package baeza.guillermo.gymandyang.ui.model
+package baeza.guillermo.gymandyang.ui.models
 
 sealed class Routes(val route: String) {
+    object SplashScreen: Routes("splashScreen")
     object LoginScreen: Routes("loginScreen")
     object HomeScreen: Routes("homeScreen")
     object RegisterScreen: Routes("registerScreen")

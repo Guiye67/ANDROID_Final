@@ -1,6 +1,6 @@
-package baeza.guillermo.gymandyang.login.data.dto
+package baeza.guillermo.gymandyang.ui.models
 
-data class UserDTO(
+data class User(
     val _id: String,
     val email: String,
     val name: String,

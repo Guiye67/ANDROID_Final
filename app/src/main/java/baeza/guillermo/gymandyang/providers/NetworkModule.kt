@@ -2,6 +2,7 @@ package baeza.guillermo.gymandyang.providers
 
 import baeza.guillermo.gymandyang.login.data.network.LoginClient
 import baeza.guillermo.gymandyang.providers.Constants.IP_ADDRESS
+import baeza.guillermo.gymandyang.register.data.network.RegisterClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,5 +47,11 @@ class NetworkModule {
     @Provides
     fun provideLoginClient(retrofit: Retrofit): LoginClient {
         return retrofit.create(LoginClient::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideRegisterClient(retrofit: Retrofit): RegisterClient {
+        return retrofit.create(RegisterClient::class.java)
     }
 }

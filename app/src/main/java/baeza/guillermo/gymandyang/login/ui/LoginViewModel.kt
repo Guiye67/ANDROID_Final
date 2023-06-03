@@ -9,11 +9,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import baeza.guillermo.gymandyang.login.data.datastore.UserPreferenceService
-import baeza.guillermo.gymandyang.login.data.dto.UserDTO
 import baeza.guillermo.gymandyang.login.domain.LoginUseCase
-import baeza.guillermo.gymandyang.ui.model.Routes
-import com.google.gson.annotations.SerializedName
+import baeza.guillermo.gymandyang.ui.models.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -30,7 +27,6 @@ class LoginViewModel @Inject constructor(
     val password: LiveData<String> = _password
 
     private val _validEmail = MutableLiveData<Boolean>()
-    val validEmail: LiveData<Boolean> = _validEmail
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
@@ -41,13 +37,28 @@ class LoginViewModel @Inject constructor(
         _validEmail.value = isValidEmail(email)
     }
 
-    fun onLogin(navCon: NavHostController, scope: CoroutineScope, scaffoldState: ScaffoldState) {
+    fun onBtnClick(navCon: NavHostController, scope: CoroutineScope, scaffoldState: ScaffoldState) {
+        if (_validEmail.value != null && _validEmail.value!!) {
+            doLogin(navCon, scope, scaffoldState)
+        }
+        else {
+            scope.launch {
+                scaffoldState.snackbarHostState.showSnackbar(
+                    message = "Invalid Email",
+                    duration = SnackbarDuration.Short
+                )
+            }
+        }
+    }
+
+    private fun doLogin(navCon: NavHostController, scope: CoroutineScope, scaffoldState: ScaffoldState) {
         _loading.value = true
         viewModelScope.launch {
             val result = loginUseCase(_email.value!!, _password.value!!)
             if(result._id != "-1") {
                 Log.i("Gym", "Login completed")
 
+                navCon.popBackStack()
                 navCon.navigate(Routes.HomeScreen.route)
                 onFieldChange("", "")
             } else {

@@ -8,7 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import baeza.guillermo.gymandyang.ui.model.Routes
+import baeza.guillermo.gymandyang.ui.models.Routes
 
 @Composable
 fun HomeScreen(navCon: NavHostController, scaffoldState: ScaffoldState, homeViewModel: HomeViewModel) {

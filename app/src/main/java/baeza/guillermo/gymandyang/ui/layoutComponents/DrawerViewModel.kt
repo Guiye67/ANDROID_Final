@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import baeza.guillermo.gymandyang.login.data.datastore.UserPreferenceService
-import baeza.guillermo.gymandyang.login.data.dto.UserDTO
-import baeza.guillermo.gymandyang.ui.model.Routes
+import baeza.guillermo.gymandyang.datastore.UserPreferenceService
+import baeza.guillermo.gymandyang.ui.models.User
+import baeza.guillermo.gymandyang.ui.models.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -18,8 +18,8 @@ import javax.inject.Inject
 class DrawerViewModel @Inject constructor(
     private val userPreference: UserPreferenceService
 ) : ViewModel() {
-    private val _user = MutableLiveData<UserDTO>()
-    val user: LiveData<UserDTO> = _user
+    private val _user = MutableLiveData<User>()
+    val user: LiveData<User> = _user
 
     fun getUser() {
         viewModelScope.launch {
@@ -30,8 +30,8 @@ class DrawerViewModel @Inject constructor(
     fun doLogout(navCon: NavHostController, scaffoldState: ScaffoldState, scope: CoroutineScope) {
         scope.launch {
             scaffoldState.drawerState.close()
-            userPreference.clearData()
-            navCon.popBackStack(Routes.LoginScreen.route, inclusive = false)
+            navCon.navigate(Routes.LoginScreen.route) {popUpTo(navCon.graph.id) {inclusive = true} }
+            //navCon.popBackStack(Routes.LoginScreen.route, inclusive = false)
         }
     }
 }
