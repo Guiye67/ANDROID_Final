@@ -103,7 +103,6 @@ fun ShowPasswordFields(
     )
 
     LaunchedEffect(changePassword) {
-        Log.i("GYM", "shit happens - $aux")
         if (aux != 0) colHeight = boxHeightAnimation
         aux++
     }

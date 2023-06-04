@@ -12,8 +12,8 @@ import baeza.guillermo.gymandyang.ui.models.User
 fun CustomDrawer(drawerViewModel: DrawerViewModel, navCon: NavHostController, scaffoldState: ScaffoldState) {
     val user: User by drawerViewModel.user.observeAsState(User("","","","","", listOf(),""))
 
-    LaunchedEffect(key1 = false) {
-        drawerViewModel.getUser()
+    LaunchedEffect(scaffoldState.drawerState.isOpen) {
+        if (scaffoldState.drawerState.isOpen) drawerViewModel.getUser()
     }
 
     DrawerHeader(user.name, user.surname)
