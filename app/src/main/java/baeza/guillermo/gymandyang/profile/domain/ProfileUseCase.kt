@@ -1,7 +1,7 @@
 package baeza.guillermo.gymandyang.profile.domain
 
 import baeza.guillermo.gymandyang.profile.data.dto.ProfileDTO
-import baeza.guillermo.gymandyang.profile.data.network.ProfileRepository
+import baeza.guillermo.gymandyang.profile.data.ProfileRepository
 import baeza.guillermo.gymandyang.ui.models.User
 import javax.inject.Inject
 

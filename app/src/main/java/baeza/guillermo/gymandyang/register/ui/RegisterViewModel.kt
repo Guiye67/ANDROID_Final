@@ -85,18 +85,11 @@ class RegisterViewModel @Inject constructor(
             if (result._id != "-1") {
                 Log.i("Gym", "Register completed")
 
-//                navCon.popBackStack()
-//                navCon.navigate(Routes.HomeScreen.route)
                 navCon.navigate(Routes.HomeScreen.route) {popUpTo(navCon.graph.id) {inclusive = true} }
                 onFieldChange("", "", "", "", "")
             } else {
                 Log.i("Gym", "Error: ${result.email}")
-                scope.launch {
-                    scaffoldState.snackbarHostState.showSnackbar(
-                        message = "Error: ${result.email}",
-                        duration = SnackbarDuration.Short
-                    )
-                }
+                launchSnackbar(scope, scaffoldState, "Error: ${result.email}")
             }
             _loading.value = false
         }

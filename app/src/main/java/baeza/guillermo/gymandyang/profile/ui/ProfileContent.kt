@@ -1,6 +1,7 @@
 package baeza.guillermo.gymandyang.profile.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import baeza.guillermo.gymandyang.ui.theme.DarkPruple
 import baeza.guillermo.gymandyang.ui.theme.MainGreen
 import baeza.guillermo.gymandyang.ui.theme.MainPruple
 import baeza.guillermo.gymandyang.ui.theme.MainRed
@@ -235,7 +237,19 @@ fun PaymentDialog(profileViewModel: ProfileViewModel, scope: CoroutineScope, sca
                     value = if (selectedOption == 1) "$selectedOption month" else "$selectedOption months",
                     onValueChange = {},
                     readOnly = true,
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) }
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                    modifier = Modifier
+                        .border(
+                            3.dp,
+                            DarkPruple,
+                            RoundedCornerShape(35.dp)
+                        ),
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    )
                 )
 
                 ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {

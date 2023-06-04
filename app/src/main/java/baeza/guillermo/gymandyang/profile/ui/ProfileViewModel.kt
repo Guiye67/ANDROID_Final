@@ -158,12 +158,7 @@ class ProfileViewModel @Inject constructor(
                 Log.i("Gym", "Update completed")
 
                 if (_changePassword.value!!) {
-                    scope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar(
-                            message = "Password updated successfuly",
-                            duration = SnackbarDuration.Short
-                        )
-                    }
+                    launchSnackbar(scope, scaffoldState, "Password updated successfuly")
                 }
 
                 _changePassword.value = false
@@ -171,12 +166,7 @@ class ProfileViewModel @Inject constructor(
                 initUser()
             } else {
                 Log.i("Gym", "Error: ${result.email}")
-                scope.launch {
-                    scaffoldState.snackbarHostState.showSnackbar(
-                        message = "Error: ${result.email}",
-                        duration = SnackbarDuration.Short
-                    )
-                }
+                launchSnackbar(scope, scaffoldState, "Error: ${result.email}")
             }
             _loading.value = false
         }

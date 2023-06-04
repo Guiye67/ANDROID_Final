@@ -1,9 +1,8 @@
-package baeza.guillermo.gymandyang.profile.data
+package baeza.guillermo.gymandyang.profile.data.network
 
 import android.util.Log
 import baeza.guillermo.gymandyang.datastore.UserPreferenceService
 import baeza.guillermo.gymandyang.profile.data.dto.ProfileDTO
-import baeza.guillermo.gymandyang.profile.data.network.ProfileClient
 import baeza.guillermo.gymandyang.ui.models.User
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -75,7 +74,7 @@ class ProfileService @Inject constructor(
             } else {
                 User(
                     _id = "-1",
-                    email = "Email not valid",
+                    email = "Service error",
                     name = "",
                     surname = "",
                     payment = "",

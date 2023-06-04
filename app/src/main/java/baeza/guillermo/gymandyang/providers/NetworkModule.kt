@@ -1,5 +1,6 @@
 package baeza.guillermo.gymandyang.providers
 
+import baeza.guillermo.gymandyang.diets.data.network.DietsClient
 import baeza.guillermo.gymandyang.login.data.network.LoginClient
 import baeza.guillermo.gymandyang.profile.data.network.ProfileClient
 import baeza.guillermo.gymandyang.providers.Constants.IP_ADDRESS
@@ -60,5 +61,11 @@ class NetworkModule {
     @Provides
     fun provideProfileClient(retrofit: Retrofit): ProfileClient {
         return retrofit.create(ProfileClient::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDietsClient(retrofit: Retrofit): DietsClient {
+        return retrofit.create(DietsClient::class.java)
     }
 }
