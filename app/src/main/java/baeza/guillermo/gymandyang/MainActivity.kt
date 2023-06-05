@@ -17,6 +17,8 @@ import baeza.guillermo.gymandyang.home.ui.HomeScreen
 import baeza.guillermo.gymandyang.home.ui.HomeViewModel
 import baeza.guillermo.gymandyang.login.ui.LoginScreen
 import baeza.guillermo.gymandyang.login.ui.LoginViewModel
+import baeza.guillermo.gymandyang.posts.ui.PostsScreen
+import baeza.guillermo.gymandyang.posts.ui.PostsViewModel
 import baeza.guillermo.gymandyang.profile.ui.ProfileScreen
 import baeza.guillermo.gymandyang.profile.ui.ProfileViewModel
 import baeza.guillermo.gymandyang.register.ui.RegisterScreen
@@ -40,6 +42,7 @@ class MainActivity : ComponentActivity() {
     private val profileViewModel: ProfileViewModel by viewModels()
     private val dietsViewModel: DietsViewModel by viewModels()
     private val suggestionsViewModel: SuggestionsViewModel by viewModels()
+    private val postsViewModel: PostsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +81,7 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(route = Routes.PostsScreen.route) {
                         CustomScaffold(drawerViewModel, navCon, scaffoldState, scope) {
-                            Text(text = "Posts")
+                            PostsScreen(scaffoldState = scaffoldState, postsViewModel = postsViewModel)
                         }
                     }
                     composable(route = Routes.DietsScreen.route) {
