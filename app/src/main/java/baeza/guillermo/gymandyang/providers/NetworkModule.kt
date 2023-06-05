@@ -5,6 +5,7 @@ import baeza.guillermo.gymandyang.login.data.network.LoginClient
 import baeza.guillermo.gymandyang.profile.data.network.ProfileClient
 import baeza.guillermo.gymandyang.providers.Constants.IP_ADDRESS
 import baeza.guillermo.gymandyang.register.data.network.RegisterClient
+import baeza.guillermo.gymandyang.suggestions.data.network.SuggestionsClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -67,5 +68,11 @@ class NetworkModule {
     @Provides
     fun provideDietsClient(retrofit: Retrofit): DietsClient {
         return retrofit.create(DietsClient::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSuggestionsClient(retrofit: Retrofit): SuggestionsClient {
+        return retrofit.create(SuggestionsClient::class.java)
     }
 }

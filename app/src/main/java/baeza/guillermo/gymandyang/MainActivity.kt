@@ -21,6 +21,8 @@ import baeza.guillermo.gymandyang.profile.ui.ProfileScreen
 import baeza.guillermo.gymandyang.profile.ui.ProfileViewModel
 import baeza.guillermo.gymandyang.register.ui.RegisterScreen
 import baeza.guillermo.gymandyang.register.ui.RegisterViewModel
+import baeza.guillermo.gymandyang.suggestions.ui.SuggestionsScreen
+import baeza.guillermo.gymandyang.suggestions.ui.SuggestionsViewModel
 import baeza.guillermo.gymandyang.ui.models.Routes
 import baeza.guillermo.gymandyang.ui.theme.ANDROID_FinalTheme
 import baeza.guillermo.gymandyang.ui.splashScreen.SplashScreen
@@ -37,6 +39,7 @@ class MainActivity : ComponentActivity() {
     private val registerViewModel: RegisterViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
     private val dietsViewModel: DietsViewModel by viewModels()
+    private val suggestionsViewModel: SuggestionsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,12 +83,12 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(route = Routes.DietsScreen.route) {
                         CustomScaffold(drawerViewModel, navCon, scaffoldState, scope) {
-                            DietsScreen(navCon = navCon, scaffoldState = scaffoldState, dietsViewModel = dietsViewModel)
+                            DietsScreen(scaffoldState = scaffoldState, dietsViewModel = dietsViewModel)
                         }
                     }
                     composable(route = Routes.SuggestionsScreen.route) {
                         CustomScaffold(drawerViewModel, navCon, scaffoldState, scope) {
-                            Text(text = "Suggestions")
+                            SuggestionsScreen(scaffoldState = scaffoldState, suggestionsViewModel = suggestionsViewModel)
                         }
                     }
                 }

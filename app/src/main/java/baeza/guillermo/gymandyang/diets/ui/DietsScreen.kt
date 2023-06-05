@@ -32,7 +32,7 @@ import baeza.guillermo.gymandyang.ui.theme.MainGreen
 import baeza.guillermo.gymandyang.ui.theme.MainPruple
 
 @Composable
-fun DietsScreen(navCon: NavHostController, scaffoldState: ScaffoldState, dietsViewModel: DietsViewModel) {
+fun DietsScreen(scaffoldState: ScaffoldState, dietsViewModel: DietsViewModel) {
     val age:String by dietsViewModel.age.observeAsState(initial = "")
     val gender:String by dietsViewModel.gender.observeAsState(initial = "")
     val weight:String by dietsViewModel.weight.observeAsState(initial = "")
@@ -137,6 +137,7 @@ fun CustomField(label: String, type: String, value: String, onValueChanged: (Str
         label = { Text(label) },
         singleLine = true,
         modifier = Modifier
+            .fillMaxWidth(0.8f)
             .border(
                 3.dp,
                 DarkPruple,
