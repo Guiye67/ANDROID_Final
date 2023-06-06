@@ -22,6 +22,9 @@ class PostsViewModel @Inject constructor(
     private val _posts = MutableLiveData<List<Post>>()
     val posts: LiveData<List<Post>> = _posts
 
+    private val _singlePost = MutableLiveData<Post>()
+    val singlePost: LiveData<Post> = _singlePost
+
     fun getPosts() {
         _loading.value = true
         viewModelScope.launch {
@@ -29,5 +32,13 @@ class PostsViewModel @Inject constructor(
             Log.i("GYM", "posts: ${_posts.value}")
             _loading.value = false
         }
+    }
+
+    fun onCardClick(post: Post) {
+        _singlePost.value = post
+    }
+
+    fun clearSingleView() {
+        _singlePost.value = null
     }
 }

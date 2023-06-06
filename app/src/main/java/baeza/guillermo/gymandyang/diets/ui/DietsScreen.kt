@@ -163,6 +163,7 @@ fun SelectMenu(label: String, options: List<String>, value: String, onValueChang
             value = value,
             onValueChange = {},
             readOnly = true,
+            singleLine = true,
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
             label = { Text(text = label) },
             placeholder = { Text(text = "Select") },

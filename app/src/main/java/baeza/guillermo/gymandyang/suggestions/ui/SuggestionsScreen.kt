@@ -131,7 +131,7 @@ fun DescriptionField(value: String, onValueChange: (String) -> Unit) {
             .fillMaxWidth(0.8f)
             .height(380.dp)
             .border(
-                4.dp,
+                3.dp,
                 DarkPruple,
                 RoundedCornerShape(35.dp)
             ),
