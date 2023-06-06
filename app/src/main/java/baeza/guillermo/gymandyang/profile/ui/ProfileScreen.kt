@@ -28,7 +28,7 @@ fun ProfileScreen(navCon: NavHostController, scaffoldState: ScaffoldState, profi
     val updating:Boolean by profileViewModel.updating.observeAsState(initial = false)
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(key1 = false) {
+    LaunchedEffect(false) {
         profileViewModel.initUser()
     }
 

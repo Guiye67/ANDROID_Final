@@ -113,7 +113,8 @@ fun SinglePostView(post: Post, onBackClick: () -> Unit) {
                 Button(
                     onClick = { onBackClick() },
                     colors = ButtonDefaults.buttonColors(backgroundColor = MainRed),
-                    shape = RoundedCornerShape(20.dp)
+                    shape = RoundedCornerShape(20.dp),
+                    modifier = Modifier.height(40.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,

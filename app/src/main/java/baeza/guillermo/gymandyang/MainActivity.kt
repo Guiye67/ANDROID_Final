@@ -11,6 +11,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import baeza.guillermo.gymandyang.classes.ui.ClassesScreen
+import baeza.guillermo.gymandyang.classes.ui.ClassesViewModel
 import baeza.guillermo.gymandyang.diets.ui.DietsScreen
 import baeza.guillermo.gymandyang.diets.ui.DietsViewModel
 import baeza.guillermo.gymandyang.home.ui.HomeScreen
@@ -43,6 +45,7 @@ class MainActivity : ComponentActivity() {
     private val dietsViewModel: DietsViewModel by viewModels()
     private val suggestionsViewModel: SuggestionsViewModel by viewModels()
     private val postsViewModel: PostsViewModel by viewModels()
+    private val classesViewModel: ClassesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +79,7 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(route = Routes.ClassesScreen.route) {
                         CustomScaffold(drawerViewModel, navCon, scaffoldState, scope) {
-                            Text(text = "Classes")
+                            ClassesScreen(scaffoldState = scaffoldState, classesViewModel = classesViewModel)
                         }
                     }
                     composable(route = Routes.PostsScreen.route) {

@@ -1,5 +1,6 @@
 package baeza.guillermo.gymandyang.providers
 
+import baeza.guillermo.gymandyang.classes.data.network.ClassesClient
 import baeza.guillermo.gymandyang.diets.data.network.DietsClient
 import baeza.guillermo.gymandyang.login.data.network.LoginClient
 import baeza.guillermo.gymandyang.posts.data.network.PostsClient
@@ -81,5 +82,11 @@ class NetworkModule {
     @Provides
     fun providePostsClient(retrofit: Retrofit): PostsClient {
         return retrofit.create(PostsClient::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideClassesClient(retrofit: Retrofit): ClassesClient {
+        return retrofit.create(ClassesClient::class.java)
     }
 }

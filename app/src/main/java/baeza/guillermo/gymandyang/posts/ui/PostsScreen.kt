@@ -1,6 +1,5 @@
 package baeza.guillermo.gymandyang.posts.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -17,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -69,7 +67,7 @@ fun PostsScreen(scaffoldState: ScaffoldState, postsViewModel: PostsViewModel) {
                             leadingIcon = {
                                 Icon(imageVector = Icons.Default.Search, contentDescription = "Search Icon")
                             },
-                            modifier = Modifier.fillMaxWidth(0.7f)
+                            modifier = Modifier.fillMaxWidth(0.8f)
                                 .border(
                                     3.dp,
                                     DarkPruple,
@@ -89,17 +87,13 @@ fun PostsScreen(scaffoldState: ScaffoldState, postsViewModel: PostsViewModel) {
                         LazyColumn(modifier = Modifier.fillMaxSize()) {
                             item {
                                 posts.forEach { post ->
-                                    if (searchText.isEmpty()) {
-                                        PostCard(post = post) { postsViewModel.onCardClick(it) }
-                                    }
-                                    else if (
-                                        post.title.lowercase().contains(searchText.lowercase())
+                                    if (searchText.isEmpty()
+                                        || post.title.lowercase().contains(searchText.lowercase())
                                         || post.muscle.lowercase().contains(searchText.lowercase())
                                     ) {
                                         PostCard(post = post) { postsViewModel.onCardClick(it) }
+                                        Spacer(modifier = Modifier.height(5.dp))
                                     }
-
-                                    Spacer(modifier = Modifier.height(5.dp))
                                 }
                             }
                         }
@@ -112,8 +106,6 @@ fun PostsScreen(scaffoldState: ScaffoldState, postsViewModel: PostsViewModel) {
         }
     )
 }
-
-
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

@@ -170,6 +170,7 @@ fun SelectMenu(label: String, options: List<String>, value: String, onValueChang
             modifier = Modifier
                 .border(
                     3.dp,
+
                     DarkPruple,
                     RoundedCornerShape(35.dp)
                 ),
