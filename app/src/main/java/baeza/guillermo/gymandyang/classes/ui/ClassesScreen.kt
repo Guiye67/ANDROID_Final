@@ -122,13 +122,12 @@ fun ClassCard(gymClass: GymClass, scaffoldState: ScaffoldState, classesViewModel
             if (expanded) SecondCardPart(gymClass, scaffoldState, classesViewModel)
         }
     }
-
 }
 
 @Composable
 fun FirstCardPart(gymClass: GymClass) {
     var textSize by remember { mutableStateOf(22.sp) }
-    val weekDays = listOf("Mon", "Tue", "Wen", "Thu", "Fri")
+    val weekDays = listOf("Mon", "Tue", "Wed", "Thu", "Fri")
 
     Row(modifier = Modifier
         .fillMaxWidth()
@@ -209,6 +208,8 @@ fun FirstCardPart(gymClass: GymClass) {
 @Composable
 fun SecondCardPart(gymClass: GymClass, scaffoldState: ScaffoldState, classesViewModel: ClassesViewModel) {
     val userClasses: List<String> by classesViewModel.userClasses.observeAsState(initial = listOf())
+    val loading:Boolean by classesViewModel.loading.observeAsState(initial = false)
+
     val clientIsSignedUp = userClasses.contains(gymClass.name)
     val classIsFull = gymClass.signedUp.size >= 10
 
@@ -259,12 +260,22 @@ fun SecondCardPart(gymClass: GymClass, scaffoldState: ScaffoldState, classesView
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier.fillMaxWidth(0.7f)
             ) {
-                Text(
-                    text = if (clientIsSignedUp) "Sign Out"
-                            else if (!classIsFull) "Sign In"
-                            else "Class is full",
-                    color = Color.White
-                )
+                if (loading) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(
+                            strokeWidth = 2.dp,
+                            color = Color.White,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                } else {
+                    Text(
+                        text = if (clientIsSignedUp) "Sign Out"
+                        else if (!classIsFull) "Sign In"
+                        else "Class is full",
+                        color = Color.White
+                    )
+                }
             }
         }
     }

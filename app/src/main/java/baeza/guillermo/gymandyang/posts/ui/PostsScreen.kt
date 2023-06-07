@@ -32,6 +32,7 @@ import coil.compose.AsyncImage
 fun PostsScreen(scaffoldState: ScaffoldState, postsViewModel: PostsViewModel) {
     val posts:List<Post> by postsViewModel.posts.observeAsState(initial = listOf())
     val singlePost:Post? by postsViewModel.singlePost.observeAsState(initial = null)
+    val loading:Boolean by postsViewModel.loading.observeAsState(initial = false)
 
     var searchText by remember { mutableStateOf("") }
 
@@ -48,7 +49,9 @@ fun PostsScreen(scaffoldState: ScaffoldState, postsViewModel: PostsViewModel) {
                     .background(BackgroundGray)
                     .padding(5.dp)
             ) {
-                if (singlePost == null) {
+                if (loading) {
+                    CircularProgressIndicator(strokeWidth = 3.dp)
+                } else if (singlePost == null) {
                     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
                         Spacer(modifier = Modifier.height(10.dp))
                         Text(
