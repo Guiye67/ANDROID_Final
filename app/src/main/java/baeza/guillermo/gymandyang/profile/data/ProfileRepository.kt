@@ -8,7 +8,7 @@ import javax.inject.Inject
 class ProfileRepository @Inject constructor(
     private val api: ProfileService
 ) {
-    suspend fun doUpdate(data: ProfileDTO, id: String, token: String): User {
+    suspend fun doUpdate(data: ProfileDTO, id: String, token: String): String {
         return api.doUpdate(data, id, token)
     }
 }

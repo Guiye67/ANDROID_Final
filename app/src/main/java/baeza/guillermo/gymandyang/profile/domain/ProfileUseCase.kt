@@ -6,7 +6,7 @@ import baeza.guillermo.gymandyang.ui.models.User
 import javax.inject.Inject
 
 class ProfileUseCase @Inject constructor(private val repository: ProfileRepository){
-    suspend operator fun invoke(data: ProfileDTO, id: String, token: String) : User {
+    suspend operator fun invoke(data: ProfileDTO, id: String, token: String) : String {
         return repository.doUpdate(data, id, token)
     }
 }

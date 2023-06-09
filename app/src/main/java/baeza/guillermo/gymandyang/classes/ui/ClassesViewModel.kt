@@ -80,6 +80,7 @@ class ClassesViewModel @Inject constructor(
                 launchSnackbar(scope, scaffoldState, result)
             }
             initUser()
+            getClasses()
             _loading.value = false
         }
     }

@@ -26,8 +26,6 @@ import baeza.guillermo.gymandyang.R.drawable.*
 import baeza.guillermo.gymandyang.ui.models.Routes
 import baeza.guillermo.gymandyang.ui.theme.DarkPruple
 import baeza.guillermo.gymandyang.ui.theme.MainPruple
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(navCon: NavHostController, scaffoldState: ScaffoldState, loginViewModel: LoginViewModel) {
@@ -79,7 +77,7 @@ fun LoginScreen(navCon: NavHostController, scaffoldState: ScaffoldState, loginVi
 
                             CustomSpacer(10)
 
-                            RegisterLink(navCon)
+                            RegisterLink(navCon) { loginViewModel.onFieldChange("", "") }
                         } else {
                             CircularProgressIndicator(strokeWidth = 3.dp)
                         }
@@ -267,11 +265,14 @@ fun LogoImage() {
 }
 
 @Composable
-fun RegisterLink(navCon: NavHostController) {
+fun RegisterLink(navCon: NavHostController, onTextClick: () -> Unit) {
     Text(
         text = "Create new account?",
         modifier = Modifier
-            .clickable { navCon.navigate(Routes.RegisterScreen.route) },
+            .clickable {
+                onTextClick()
+                navCon.navigate(Routes.RegisterScreen.route)
+            },
         fontSize = 14.sp,
         textDecoration = TextDecoration.Underline,
         color = MainPruple

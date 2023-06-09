@@ -58,9 +58,6 @@ class MainActivity : ComponentActivity() {
                     navController = navCon,
                     startDestination = Routes.LoginScreen.route
                 ) {
-                    composable(route = Routes.SplashScreen.route) {
-                        SplashScreen(navCon = navCon)
-                    }
                     composable(route = Routes.LoginScreen.route) {
                         LoginScreen(navCon = navCon, scaffoldState = scaffoldState, loginViewModel = loginViewModel)
                     }
@@ -96,6 +93,9 @@ class MainActivity : ComponentActivity() {
                         CustomScaffold(drawerViewModel, navCon, scaffoldState, scope) {
                             SuggestionsScreen(scaffoldState = scaffoldState, suggestionsViewModel = suggestionsViewModel)
                         }
+                    }
+                    composable(route = Routes.SplashScreen.route) {
+                        SplashScreen(navCon = navCon)
                     }
                 }
             }

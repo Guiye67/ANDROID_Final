@@ -13,7 +13,7 @@ class ProfileService @Inject constructor(
     private val profileClient: ProfileClient,
     private val userPreference: UserPreferenceService
 ) {
-    suspend fun doUpdate(data: ProfileDTO, id: String, token: String): User {
+    suspend fun doUpdate(data: ProfileDTO, id: String, token: String): String {
         return withContext(Dispatchers.IO) {
             val response = profileClient.doUpdate(id, token, data)
 
@@ -30,57 +30,17 @@ class ProfileService @Inject constructor(
                     token = token
                 )
                 Gson().toJson(user).let { userPreference.addUser("user", it) }
-                user
+                "ok"
             } else if (response.code() == 401) {
-                User(
-                    _id = "-1",
-                    email = "Unauthorized token",
-                    name = "",
-                    surname = "",
-                    payment = "",
-                    classes = listOf(),
-                    token = ""
-                )
+                "Unauthorized token"
             } else if (response.code() == 404) {
-                User(
-                    _id = "-1",
-                    email = "Cannot find client",
-                    name = "",
-                    surname = "",
-                    payment = "",
-                    classes = listOf(),
-                    token = ""
-                )
+                "Cannot find client"
             } else if (response.code() == 400) {
-                User(
-                    _id = "-1",
-                    email = "Email not valid",
-                    name = "",
-                    surname = "",
-                    payment = "",
-                    classes = listOf(),
-                    token = ""
-                )
+                "Email not valid"
             } else if (response.code() == 409) {
-                User(
-                    _id = "-1",
-                    email = "Email already in use",
-                    name = "",
-                    surname = "",
-                    payment = "",
-                    classes = listOf(),
-                    token = ""
-                )
+                "Email already in use"
             } else {
-                User(
-                    _id = "-1",
-                    email = "Service error",
-                    name = "",
-                    surname = "",
-                    payment = "",
-                    classes = listOf(),
-                    token = ""
-                )
+                "Service error"
             }
         }
     }

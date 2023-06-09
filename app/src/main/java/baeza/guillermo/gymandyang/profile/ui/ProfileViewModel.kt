@@ -8,12 +8,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
 import baeza.guillermo.gymandyang.datastore.UserPreferenceService
 import baeza.guillermo.gymandyang.profile.data.dto.ProfileDTO
 import baeza.guillermo.gymandyang.profile.domain.ProfileUseCase
-import baeza.guillermo.gymandyang.register.data.dto.RegisterDTO
-import baeza.guillermo.gymandyang.ui.models.Routes
 import baeza.guillermo.gymandyang.ui.models.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -154,7 +151,7 @@ class ProfileViewModel @Inject constructor(
                 _id,
                 _token
             )
-            if (result._id != "-1") {
+            if (result == "ok") {
                 Log.i("Gym", "Update completed")
 
                 if (_changePassword.value!!) {
@@ -165,8 +162,8 @@ class ProfileViewModel @Inject constructor(
                 _updating.value = false
                 initUser()
             } else {
-                Log.i("Gym", "Error: ${result.email}")
-                launchSnackbar(scope, scaffoldState, "Error: ${result.email}")
+                Log.i("Gym", "Error: $result")
+                launchSnackbar(scope, scaffoldState, "Error: $result")
             }
             _loading.value = false
         }

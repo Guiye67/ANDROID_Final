@@ -31,7 +31,6 @@ class DrawerViewModel @Inject constructor(
         scope.launch {
             scaffoldState.drawerState.close()
             navCon.navigate(Routes.LoginScreen.route) {popUpTo(navCon.graph.id) {inclusive = true} }
-            //navCon.popBackStack(Routes.LoginScreen.route, inclusive = false)
         }
     }
 }

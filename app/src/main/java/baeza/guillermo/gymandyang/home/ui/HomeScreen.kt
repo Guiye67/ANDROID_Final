@@ -1,7 +1,5 @@
 package baeza.guillermo.gymandyang.home.ui
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -10,7 +8,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -19,7 +16,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import baeza.guillermo.gymandyang.ui.models.GymClass
 import baeza.guillermo.gymandyang.ui.models.Routes
-import baeza.guillermo.gymandyang.ui.theme.BackgroundGray
 import baeza.guillermo.gymandyang.ui.theme.MainPruple
 import io.github.boguszpawlowski.composecalendar.SelectableCalendar
 import io.github.boguszpawlowski.composecalendar.day.DefaultDay

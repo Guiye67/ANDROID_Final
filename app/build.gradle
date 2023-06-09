@@ -70,9 +70,6 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
-    implementation 'androidx.room:room-ktx:2.5.0'
-    kapt "androidx.room:room-compiler:2.5.0"
-
     implementation "io.coil-kt:coil-compose:2.2.2"
 
     implementation "io.github.boguszpawlowski.composecalendar:composecalendar:0.5.1"

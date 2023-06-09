@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import baeza.guillermo.gymandyang.datastore.UserPreferenceService
 import baeza.guillermo.gymandyang.posts.domain.PostsUseCase
 import baeza.guillermo.gymandyang.ui.models.Post
 import dagger.hilt.android.lifecycle.HiltViewModel
